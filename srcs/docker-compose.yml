@@ -19,7 +19,7 @@ services:
     depends_on:
       - db
     volumes:
-      - wordpress_data:/var/www/html
+      - wordpress_data:/var/www/wordpress
     networks:
       - mariadb_net
       - wordpress_net
@@ -34,7 +34,7 @@ services:
       - .env
     restart: always
     volumes:
-      - wordpress_data:/var/www/html
+      - wordpress_data:/var/www/wordpress
     networks:
       - nginx_net
       - wordpress_net

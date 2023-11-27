@@ -1,13 +1,5 @@
 #!/bin/bash
 
-# Load variables from .env file in the parent folder
-if [ -f "/tmp/.env" ]; then
-    source "/tmp/.env"
-else
-	echo "Error: no .env file found in the folder. Please create one."
-	exit 1
-fi
-
 #Check if the database exists
 if [ -d "/var/lib/mysql/'${SQL_NAME}'" ]; then
 	echo "Database already exists"

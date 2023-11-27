@@ -12,11 +12,11 @@ RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
 
 COPY ./conf/nginx.conf /etc/nginx/conf.d
 
-RUN chmod 755 /var/www/html
-RUN chown -R www-data:www-data /var/www/html
+RUN chmod 755 /var/www/wordpress
+RUN chown -R www-data:www-data /var/www/wordpress
 
-COPY ./tools/index.html /var/www/html
-COPY ./tools/image.png /var/www/html
+#COPY ./tools/index.html /var/www/html
+#COPY ./tools/image.png /var/www/html
 
 EXPOSE 443
 

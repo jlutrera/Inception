@@ -11,6 +11,5 @@ RUN chown -R root:root /etc/mysql/mariadb.conf.d/50-server.cnf
 EXPOSE 3306
 
 COPY ./tools/create_db.sh /tmp/create_db.sh
-COPY ./.env /tmp/.env
 RUN chmod +x /tmp/create_db.sh
 ENTRYPOINT ["bash", "/tmp/create_db.sh"]
