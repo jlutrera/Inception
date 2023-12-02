@@ -1,17 +1,24 @@
 #!/bin/bash
 
+MYSQL_INIT_FILE="/createdb.sql"
+
+chown -R mysql:mysql /var/lib/mysql
+chmod 777 /var/lib/mysql
+
+mysql_install_db > /dev/null 2>&1
+
 #Check if the database exists
-if [ -d "/var/lib/mysql/'${SQL_NAME}'" ]; then
-	echo "Database already exists"
+if [ -d "/var/lib/mysql/$DB_DATABASE" ]; then
+	echo "Starting MariaDB server..."
+	mysql_safe > /dev/null 2>&1
 else
-	service mysql start
+	rm -f "$MYSQL_INIT_FILE"
 	# Wait for mysql to start
-	sleep 5
-	mysql -e "CREATE DATABASE IF NOT EXISTS ${SQL_NAME};"
-	mysql -e "CREATE USER IF NOT EXISTS '${SQL_USER}'@'%' IDENTIFIED BY '${SQL_USERPWD}';"
-	mysql -e "GRANT ALL PRIVILEGES ON ${SQL_NAME}.*  TO '${SQL_USER}'@'%' IDENTIFIED BY '${SQL_USERPWD}';"
-	mysql -e "ALTER USER '${SQL_ROOT}'@'localhost' IDENTIFIED BY '${SQL_ROOTPWD}';"
-	mysql -e "FLUSH PRIVILEGES;"
-	mysqladmin -u $SQL_ROOT -p$SQL_ROOTPWD shutdown
+	echo "CREATE DATABASE $DB_DATABASE;" > "$MYSQL_INIT_FILE"
+	echo "CREATE USER '$DB_USER'@'%' IDENTIFIED BY '$DB_USER_PASSWORD';" >> "$MYSQL_INIT_FILE"
+	echo "GRANT ALL PRIVILEGES ON $DB_DATABASE.*  TO '$DB_USER'@'%' WITH GRANT OPTION;" >> "$MYSQL_INIT_FILE"
+	echo "FLUSH PRIVILEGES;" >> "$MYSQL_INIT_FILE"
+	echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '$DB_ROOT_PASSWORD';" >> "$MYSQL_INIT_FILE"
+	echo "Starting MariaDB server..."
+	mysql_safe --init-file=$MYSQL_INIT_FILE > /dev/null 2>&1
 fi
-exec mysqld_safe
