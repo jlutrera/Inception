@@ -1,11 +1,14 @@
 FROM debian:buster
 
-RUN apt-get update -y && apt-get upgrade -y && \
+RUN apt-get update -y && \
 	apt-get install -y mariadb-server && \
 	rm -rf /var/lib/apt/lists/*
 
 COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/
+RUN chmod 644 /etc/mysql/mariadb.conf.d/50-server.cnf
 
-COPY ./tools/create_db.sh /var/www/
-RUN chmod +x /tmp/create_db.sh
-CMD ["/var/www/create_db.sh"]
+EXPOSE 3306
+
+COPY ./tools/init_db.sh /tmp/
+RUN chmod +x /tmp/init_db.sh
+CMD ["/tmp/init_db.sh"]

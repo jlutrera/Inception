@@ -6,7 +6,7 @@ services:
     container_name : mariadb
     build: ./requirements/mariadb
     env_file: .env
-    restart: unless-stopped
+    restart: always
     expose:
       - "3306"
     volumes:
@@ -18,7 +18,7 @@ services:
     container_name : wordpress
     build: ./requirements/wordpress
     env_file: .env
-    restart: on-failure
+    restart: always
     expose:
       - "9000"
     depends_on:
@@ -36,7 +36,7 @@ services:
     depends_on:
       - wordpress
     env_file: .env
-    restart: on-failure
+    restart: always
     volumes:
       - wordpress_data:/var/www/wordpress
     networks:
