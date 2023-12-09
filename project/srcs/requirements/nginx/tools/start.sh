@@ -9,6 +9,4 @@ openssl req -x509 -nodes -days 365 -newkey rsa:4096 \
 echo "Nginx: ssl is set up!";
 fi
 
-# Run nginx.
-# Nginx utiliza la directiva 'daemon off' para ejecutarse en primer plano.
 nginx -g 'daemon off;';

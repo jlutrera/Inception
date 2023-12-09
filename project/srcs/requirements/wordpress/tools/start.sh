@@ -19,18 +19,18 @@ if [ ! -f /var/www/html/wordpress/wp-config.php ]; then
 				--dbname=$DB_DATABASE \
 				--dbhost=$DB_HOST \
 				--dbprefix=wp_ \
-				--dbuser=$USER \
+				--dbuser=$DB_USER \
 				--dbpass=$DB_USER_PASSWORD;
 
 	echo "Wordpress: creando usuarios..."
 	wp core install --allow-root \
-				--url=${DOMAIN_NAME} \
-				--title=${WORDPRESS_NAME} \
+				--url= jutrera.42.fr \
+				--title= wordpress \
 				--admin_user=${WORDPRESS_ROOT_LOGIN} \
 				--admin_password=${WORDPRESS_ROOT_PASSWORD} \
 				--admin_email=${WORDPRESS_ROOT_EMAIL};
 
-	wp user create ${WORDPRESS_LOGIN} ${WORDPRESS_USER_EMAIL} --user_pass=${WORDPRESS_PASSWORD} --role=author --allow-root;
+	wp user create ${WORDPRESS_USER_LOGIN} ${WORDPRESS_USER_EMAIL} --user_pass=${WORDPRESS_USER_PASSWORD} --role=author --allow-root;
 	wp option update comment_previously_approved 0 --allow-root;
 	wp option update comments_notify 0 --allow-root;
 	wp option update moderation_notify 0 --allow-root;

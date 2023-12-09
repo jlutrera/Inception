@@ -1,33 +1,13 @@
-# Archivo docker-compose que comienza con la versión.
-# Utilizamos "3.9" ya que es la versión más reciente en el momento de escribir esto
-version: '3.9'
+version: '3'
 
-# Es importante entender que docker-compose trabaja con servicios.
-# 1 servicio = 1 contenedor.
-# Un servicio puede ser un sistema de gestión de contenido, un servidor, un servidor de bases de datos...
-# La sección donde se describirán los servicios comienza con 'services'
 services:
   mariadb:
-    # Nombre del contenedor
     container_name: mariadb
-    # La palabra clave "build" permite especificar
-    # la ruta al archivo Dockerfile que se debe utilizar para crear la imagen,
-    # que permitirá ejecutar el servicio.
-    # Aquí, './requirements/mariadb' se corresponde con la ruta a la carpeta mariadb,
-    # que contiene el Dockerfile correspondiente
     build: ./requirements/mariadb
-    # Este parámetro define la política de reinicio del contenedor
     restart: always
-    # Este parámetro indica a Compose que deseamos agregar variables de entorno desde el archivo .env,
-    # que se encuentra en el contexto de compilación.
-    # En este caso, el contexto de compilación es nuestro directorio actual.
     env_file: .env
-    # Aquí montamos un volumen nombrado llamado mariadb en el directorio /var/lib/mysql dentro del contenedor.
-    # Esta es la ubicación estándar de datos en la mayoría de las distribuciones.
     volumes:
       - mariadb:/var/lib/mysql
-    # Este parámetro indica que el servicio del contenedor se conectará a la red llamada project,
-    # que definiremos más abajo en el archivo.
     networks:
       - project
 
@@ -40,9 +20,6 @@ services:
     networks:
       - project
     restart: always
-    # Este parámetro "garantiza" que nuestros contenedores se inicien en el orden de dependencia.
-    # El contenedor de WordPress se inicia después del contenedor de mariadb,
-    # ya que nuestra aplicación WordPress depende de la base de datos y el usuario.
     depends_on:
       - mariadb
 
@@ -58,8 +35,7 @@ services:
       - wordpress
     restart: always
     ports:
-      # - "8080:80" # http
-      - "443:443" # https
+      - "443:443"
 
 volumes:
   mariadb:
@@ -68,23 +44,15 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ../data/mariadb
-      #device: /home/$USER/data/mariadb
+      device: /home/$USER/data/mariadb
   wordpress:
     name: wordpress
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ../data/wordpress
-      #device: /home/$USER/data/wordpress
+      device: /home/$USER/data/wordpress
       
-# El sistema de red 'project' creado por el usuario permite la comunicación entre nuestros contenedores,
-# ya que están en el mismo host del demonio de Docker.
-# Esto permite organizar el tráfico y la comunicación dentro de la aplicación,
-# ya que abre todos los puertos entre contenedores en una red de puente, ocultando los puertos del mundo exterior.
-# De esta manera, nuestros contenedores mariadb, wordpress y nginx pueden interactuar entre sí,
-# y solo necesitaremos abrir el puerto 440 para el acceso externo a la aplicación.
 networks:
   project:
     driver: bridge

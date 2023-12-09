@@ -1,13 +1,11 @@
-all:	up
-
-build:
-		@docker-compose -f srcs/docker-compose.yml build
+all:
+		@sudo rm -rf /home/jutrera/data
+		@sudo mkdir /home/jutrera/data
+		@sudo mkdir /home/jutrera/data/mariadb
+		@sudo mkdir /home/jutrera/data/wordpress
+		@docker-compose -f srcs/docker-compose.yml up -d
 
 up:
-		rm -Rf ./data
-		mkdir ./data
-		mkdir ./data/mariadb
-		mkdir ./data/wordpress
 		@docker-compose -f srcs/docker-compose.yml up -d
 
 down:
@@ -25,9 +23,9 @@ list:
 logs :
 		@docker-compose -f srcs/docker-compose.yml logs
 
-clean:	
+clean:
 		@docker compose -f srcs/docker-compose.yml down -v
 		@docker image prune -a -f
-		@rm -rf ./data
+		@sudo rm -rf /home/jutrera/data
 
-.PHONY:	all build up down start stop logs list clean
+.PHONY:	all up down start stop logs list clean

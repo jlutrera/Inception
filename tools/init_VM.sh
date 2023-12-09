@@ -44,6 +44,4 @@ sudo chmod 666 /var/run/docker.sock
 sudo cat << EOF >> /etc/hosts
 #Inception Setup
 127.0.0.1 jutrera.42.fr
-127.0.0.1 www.jutrera.42.fr
-127.0.0.1 https:www.jutrera.42.fr
 EOF
