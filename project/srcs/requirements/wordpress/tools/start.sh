@@ -17,7 +17,7 @@ if [ ! -f /var/www/html/wordpress/wp-config.php ]; then
 	wp core download --allow-root;
 	wp config create --allow-root \
 				--dbname=$DB_DATABASE \
-				--dbhost=$DB_HOST \
+				--dbhost= mariadb:3306 \
 				--dbprefix=wp_ \
 				--dbuser=$DB_USER \
 				--dbpass=$DB_USER_PASSWORD;
