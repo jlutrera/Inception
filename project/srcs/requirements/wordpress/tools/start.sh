@@ -22,7 +22,6 @@ if [ ! -f /var/www/html/wordpress/wp-config.php ]; then
 				--dbuser=$DB_USER \
 				--dbpass=$DB_USER_PASSWORD;
 
-	echo "Wordpress: creando usuarios..."
 	wp core install --allow-root \
 				--url=jutrera.42.fr \
 				--title=wordpress \
