@@ -14,8 +14,8 @@ You will be lost and you will not understand properly how it works. Do it step b
 
 2. **Begin with Nginx** by displaying an index.html page 
 	- Learn first how to launch a docker image && to execute this image **without using docker-compose**
-	- Learn How to display an html page on http://localhost:80"
-	- Learn how to display an html page with SSL on http://localhost:443"
+	- Learn How to display an html page on http://localhost:80
+	- Learn how to display an html page with SSL on http://localhost:443
 
 3. **Do Wordpress**
 	- You can begin from here the docker-compose file, you don't need it before
@@ -26,14 +26,7 @@ You want to try if each container works in general? No worries, you will be able
 The 3 github which helped me a lot for the project : [llescure](https://github.com/llescure/42_Inception), [malatini](https://github.com/42cursus/inception) and [vbachele](https://github.com/vbachele/Inception) 
 
 5. **Useful things to know about Inception.**
-- On the mac, Apache service is installed by default. I deleted Apache from my computer to avoid any problem with nginx
-- If you are at 42 on their computer you should stop these services which are running by default
-```c
-sudo service nginx stop
-sudo service mariadb stop
-sudo service apache2 stop
-sudo service mysql stop
-```
+- On my Windows pc, I had to install Ducker Desktop and enable "Use the WSL 2 based engine" in the configuration
 
 # DEFINITIONS
 
@@ -44,9 +37,57 @@ sudo service mysql stop
 - [What is Docker network](https://www.aquasec.com/cloud-native-academy/docker-container/docker-networking/)
 
 ## What is Docker ?
-Docker is an open platform for developing, shipping, and running applications. Docker enables you to separate your applications from your infrastructure so you can deliver software quickly. With Docker, you can manage your infrastructure in the same ways you manage your applications. By taking advantage of Docker’s methodologies for shipping, testing, and deploying code quickly, you can significantly reduce the delay between writing code and running it in production.
-Docker provides the ability to package and run an application in a loosely isolated environment called a container.
+Docker is a platform for developing, shipping, and running applications in containers. Containers are lightweight, standalone, and executable packages that include everything needed to run a piece of software, including the code, runtime, libraries, and system tools. Docker provides a way to package and distribute applications and their dependencies in a consistent and reproducible manner across different environments.
 
+Here's a brief explanation of how Docker works:
+
+- Docker Engine: At the core of Docker is the Docker Engine, which is a lightweight and portable runtime. It runs on the host machine's operating system and manages the containers.
+
+- Docker Image: A Docker image is a lightweight, standalone, and executable package that includes the application code, runtime, system libraries, and settings. Images are the building blocks for containers and can be created manually or using a Dockerfile, which is a script that specifies the steps to create an image.
+
+- Containerization: Containers are instances of Docker images. They run in isolated environments on the host machine, ensuring consistency and reproducibility across different environments. Containers share the host machine's kernel but have their own file systems, processes, and network interfaces.
+
+- Docker Hub (or Registry): Docker Hub is a cloud-based registry service that allows you to share and distribute Docker images. You can store your images on Docker Hub or other container registries, making it easy to share your applications with others.
+
+- Docker Compose: Docker Compose is a tool for defining and running multi-container Docker applications. It allows you to describe the services, networks, and volumes in a YAML file and then use a single command to start and run your entire application stack.
+
+- Docker Swarm and Kubernetes: Docker Swarm and Kubernetes are container orchestration tools that help manage and scale applications running in containers. They automate the deployment, scaling, and management of containerized applications, making it easier to handle large and complex systems.
+
+In summary, Docker simplifies the process of developing, packaging, and deploying applications by using containers. It provides a consistent and reproducible environment, making it easier for developers to collaborate and deploy applications across different environments.
+
+## Docker vs. Virtual Machines
+Docker and virtual machines (VMs) are both technologies used for virtualization, but they have distinct differences in their architectures and use cases. Here are some benefits of Docker over traditional virtual machines:
+
+### Resource Efficiency:
+
+- Docker: Containers share the host operating system's kernel and, therefore, are more lightweight compared to VMs. Each container includes only the application and its dependencies, reducing resource overhead.
+- Virtual Machines: VMs require a full operating system (OS) for each instance, leading to higher resource consumption. Running multiple VMs on a host can result in significant overhead.
+### Faster Startup Times:
+
+- Docker: Containers can start almost instantly because they leverage the host OS kernel. This makes them well-suited for applications with dynamic scaling requirements.
+- Virtual Machines: VMs typically take longer to start as they involve booting a full OS. This can impact the scalability and responsiveness of applications.
+### Isolation and Portability:
+
+- Docker: Containers encapsulate the application and its dependencies, providing process-level isolation. This isolation allows for consistent behavior across different environments, making Docker containers highly portable.
+- Virtual Machines: VMs provide stronger isolation by running a separate OS instance for each machine. While this isolation is beneficial for security, it can result in larger and less portable deployments.
+### Resource Utilization:
+
+- Docker: Containers can efficiently use resources since they share the host OS's kernel. This means that more containers can run on the same hardware without the overhead associated with running multiple operating systems.
+- Virtual Machines: VMs require a hypervisor to manage each instance, leading to increased resource utilization and potential performance overhead.
+### Easier Scalability:
+
+- Docker: Docker and container orchestration tools like Kubernetes make it easy to scale applications horizontally by quickly deploying additional containers.
+- Virtual Machines: Scaling VMs usually involves cloning or deploying additional VM instances, which is a comparatively slower process.
+### Consistent Development and Production Environments:
+
+- Docker: Docker ensures that the development environment is consistent with the production environment, reducing the likelihood of "it works on my machine" issues.
+- Virtual Machines: Developers working on VMs might face challenges related to environment inconsistencies between development and production.
+### Easier Maintenance and Updates:
+
+- Docker: Containers can be versioned, making it easy to roll back to previous versions or update applications without affecting the entire system.
+- Virtual Machines: VMs require more effort to manage updates and maintain consistency across multiple instances.
+
+In summary, Docker provides advantages such as resource efficiency, faster startup times, and better scalability compared to traditional virtual machines. It is particularly well-suited for microservices architectures, continuous integration/continuous deployment (CI/CD) pipelines, and environments where fast and efficient scaling is essential. However, the choice between Docker and VMs depends on specific use cases, security requirements, and existing infrastructure considerations.
 ## How to install Docker
 For this project, I need to use WSL on my laptop and I had to install Docker:
 - I went directly to the docker website and I downloaded [Docker Desktop](https://docs.docker.com/desktop/install/windows-install/)
@@ -71,7 +112,25 @@ Here are the most common types of instructions:
 - CMD [command] - lets you define the default program that is run once you start the container based on this image. Each Dockerfile only has one CMD, and only the last CMD instance is respected when multiple ones exist.
 
 ## What is Docker-compose ?
-Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application’s services. Then, with a single command, you create and start all the services from your configuration.
+Docker Compose is a tool for defining and running multi-container Docker applications. It allows you to describe the services, networks, and volumes that make up your application in a single YAML file. With Docker Compose, you can define the entire application stack, including the different services, their configurations, and how they interact with each other. Here's a brief explanation of how Docker Compose works:
+
+- Compose File: You start by creating a docker-compose.yml file, which is a YAML configuration file that defines your application's services, networks, and volumes. In this file, you specify details such as the Docker images to use, container configurations, environment variables, ports to expose, and dependencies between services.
+
+- Service Definitions: Each service in your application is defined as a separate block in the docker-compose.yml file. A service represents a containerized application or component, such as a web server, database, or any other service your application requires.
+
+- Networking: Docker Compose automatically creates a default network that connects all the services defined in the docker-compose.yml file. This allows services to communicate with each other using the service names as hostnames.
+
+- Volumes: Docker Compose can also define volumes to persist data between container restarts. This is useful for databases or any service that needs to store data beyond the container's lifecycle.
+
+- Configuration Overrides: Docker Compose allows you to override default configurations for different environments, making it easy to switch between development, testing, and production settings by using different docker-compose.yml files or environment variables.
+
+- Commands: Using the Docker Compose command-line interface (CLI), you can perform various actions, such as starting and stopping containers, building images, scaling services, and viewing logs. The most common command is docker-compose up, which starts the services defined in the docker-compose.yml file.
+
+- Scaling: Docker Compose makes it easy to scale services by specifying the desired number of replicas for a particular service. This is useful for applications that require multiple instances of a service to handle increased load or provide high availability.
+
+- Interoperability: Docker Compose is designed to work seamlessly with other Docker tools, such as Docker Swarm for orchestration and Docker Hub for image sharing. It also integrates well with Docker's ecosystem, making it a versatile tool for managing multi-container applications.
+
+In summary, Docker Compose simplifies the process of defining, managing, and running multi-container Docker applications by using a declarative YAML file. It's a valuable tool for both development and production environments, providing consistency and reproducibility across different stages of the application lifecycle.
 
 ## Commands
 ### Docker-compose commands
@@ -110,6 +169,30 @@ Compose is a tool for defining and running multi-container Docker applications. 
 - docker image kill "name", //stop a running image,
 ```
 
+## Images with and without docker compose
+The primary difference between using Docker images with Docker Compose and using them without it lies in how containerized applications are orchestrated, configured, and managed.
+
+### Docker Image Without Docker Compose:
+- Manual Configuration: When using Docker images without Docker Compose, you typically need to manually run the docker run command to start individual containers. This involves specifying various parameters such as image name, ports, volumes, and environment variables on the command line.
+
+- Isolation: Containers started without Docker Compose may not be as well-connected or isolated from each other. You would need to manage networking and dependencies between containers explicitly.
+
+- Limited Automation: The process of starting and managing containers is more manual, and there is limited automation for defining and linking multiple services.
+
+### Docker Image With Docker Compose:
+- Declarative Configuration: Docker Compose allows you to define the entire application stack in a declarative manner using a docker-compose.yml file. This file contains service definitions, network configurations, and volume mappings, making it easier to understand and manage the entire application.
+
+- Orchestration: Docker Compose provides orchestration capabilities, allowing you to define the relationships and dependencies between different services. It automatically creates a network that links the containers, making it simpler for them to communicate.
+
+- Environment Variables and Configuration Overrides: Docker Compose enables you to specify environment variables in the docker-compose.yml file, simplifying the configuration of containers. Additionally, you can use different configuration files or environment-specific variables for development, testing, and production settings.
+
+- Single-Command Operations: With Docker Compose, you can perform common operations like starting, stopping, and scaling the entire application stack with a single command (docker-compose up, docker-compose down, etc.).
+
+- Service Scaling: Docker Compose makes it easy to scale services by defining the desired number of replicas in the docker-compose.yml file. This is useful for applications that require multiple instances of a service to handle increased load or improve availability.
+
+- Improved Collaboration: Docker Compose facilitates collaboration by providing a standardized way to share and reproduce the entire application stack. This is particularly beneficial in team environments and during the development lifecycle.
+
+In summary, while Docker images can be used both with and without Docker Compose, the latter provides a higher level of abstraction and automation for managing multi-container applications. Docker Compose simplifies the process of defining, deploying, and scaling containerized applications, making it a valuable tool for development, testing, and production environments.
 # NGINX
 
 ## How to set up (our web server)
@@ -125,6 +208,73 @@ Compose is a tool for defining and running multi-container Docker applications. 
 - [PID 1 signal handling && Nginx](https://cloud.google.com/architecture/best-practices-for-building-containers#signal-handling)
 - [What is TLS ?](https://en.wikipedia.org/wiki/Transport_Layer_Security)
 
+### Why TLS/SSL certification?
+TLS (Transport Layer Security) and its predecessor SSL (Secure Sockets Layer) are cryptographic protocols that provide secure communication over a computer network, commonly the internet. The primary reason for using a TLS or SSL certificate is to ensure the confidentiality, integrity, and authenticity of data exchanged between a user's web browser and a web server. Here are the key reasons for using TLS/SSL certificates:
+
+- Encryption of Data:
+
+TLS/SSL protocols encrypt the data transmitted between a user's browser and the web server. This encryption prevents unauthorized parties from intercepting and reading sensitive information, such as login credentials, personal details, and financial transactions.
+- Confidentiality:
+
+TLS/SSL ensures the confidentiality of data by encrypting it during transmission. Even if intercepted, encrypted data is meaningless without the corresponding decryption key.
+- Integrity of Data:
+
+TLS/SSL provides data integrity, meaning that the data transmitted between the client and the server cannot be tampered with during transit. Any alteration to the data would be detected, ensuring that the received information is the same as what was sent.
+- Authentication:
+
+SSL/TLS certificates are used to authenticate the identity of the server to the client and, in some cases, vice versa. This helps users ensure that they are connecting to the legitimate and intended website, reducing the risk of man-in-the-middle attacks.
+- Trust and Credibility:
+
+Websites with valid SSL/TLS certificates show a padlock icon in the browser's address bar and use the "https://" protocol. This visual indication informs users that the connection is secure and establishes trust. Sites with valid certificates are also less likely to be flagged as potentially harmful by browsers.
+- Compliance with Data Protection Regulations:
+
+Many data protection regulations and standards, such as the General Data Protection Regulation (GDPR), require the protection of sensitive data during transmission. Using TLS/SSL helps websites comply with these regulations and avoid legal consequences.
+- Secure Transactions:
+
+For e-commerce websites and other platforms handling financial transactions, SSL/TLS certificates are essential. They ensure that sensitive financial information, such as credit card details, is transmitted securely, protecting users from potential fraud.
+- SEO Benefits:
+
+Search engines, such as Google, take into account the use of SSL/TLS as a ranking factor. Websites with SSL/TLS certificates may receive a slight boost in search engine rankings, contributing to better visibility in search results.
+- Protection Against Session Hijacking:
+
+TLS/SSL protects against session hijacking attacks by encrypting session data. This helps prevent attackers from intercepting and using session information to impersonate users.
+- Encrypted Authentication:
+
+When mutual TLS (mTLS) is employed, both the server and the client authenticate each other using certificates. This adds an extra layer of security, ensuring that both parties are who they claim to be.
+
+In summary, TLS/SSL certificates are crucial for securing the communication between clients and servers, protecting sensitive data, establishing trust, and complying with legal and regulatory requirements. They play a vital role in ensuring a secure and trustworthy online experience for users.
+
+If you're encountering a warning message while trying to access a website, there could be various reasons for it. Common warning messages related to security often indicate issues with the SSL/TLS certificate or the overall security of the connection. Here are some reasons why a warning message might appear:
+
+- Expired SSL/TLS Certificate:
+
+SSL/TLS certificates have a validity period, typically ranging from a few months to a few years. If the certificate has expired, browsers will display a warning message to inform users that the connection is not secure.
+- Mismatched Domain or Common Name:
+
+SSL/TLS certificates are issued for specific domain names (or subdomains). If the certificate's Common Name (CN) or Subject Alternative Name (SAN) does not match the domain of the website being accessed, a warning is displayed. This often happens in situations like accessing a site by its IP address instead of its domain name.
+- Self-Signed Certificate:
+
+If a website is using a self-signed certificate instead of one issued by a trusted Certificate Authority (CA), browsers will display a warning. Self-signed certificates are not automatically trusted, and users need to explicitly accept the risk when accessing such sites.
+- Insecure Cipher Suites:
+
+Browsers may display warnings if the server uses outdated or insecure cipher suites during the SSL/TLS handshake. This is a security measure to protect against vulnerabilities in cryptographic protocols.
+- Mixed Content:
+
+If a webpage is served over HTTPS but includes resources (like images, scripts, or stylesheets) loaded over HTTP, browsers may display warnings about mixed content. Modern browsers prefer to load all resources securely to prevent potential security risks.
+- Man-in-the-Middle (MitM) Attacks:
+
+If there is suspicion of a man-in-the-middle attack, where an unauthorized entity intercepts the communication between the user and the server, browsers may display a warning. This can happen if the SSL/TLS connection is tampered with.
+- Revoked Certificate:
+
+If the SSL/TLS certificate has been revoked by the Certificate Authority before its expiration date, browsers may display a warning. Revocation can occur due to compromised private keys or other security incidents.
+- Untrusted Certificate Authority:
+
+If the SSL/TLS certificate is issued by a Certificate Authority that is not recognized or trusted by the user's browser, a warning may appear. Users are advised to be cautious when encountering such situations.
+- HSTS (HTTP Strict Transport Security) Issues: 
+
+If a website has HSTS enabled but encounters issues with its SSL/TLS configuration, browsers may display warnings. HSTS enforces the use of HTTPS and may cause access issues if there are problems with the secure connection.
+
+If you encounter a warning message, carefully consider the nature of the warning and the context of the website you are visiting. In many cases, warnings are legitimate security measures to protect users from potential threats. If you are a website owner or administrator, addressing SSL/TLS certificate issues promptly is crucial for maintaining a secure and trustworthy online presence.
 ### Listen && Location
 - Listen will indicate to the server which request it has to accept:
 	Listen can take ports and adresses : example Listen 80;
@@ -197,9 +347,8 @@ In this section we have to create the Mariadb image and create 2 users.
 
 ## Useful commands
 ```c
-mysql -uroot // To connect on mysql CLI
-SELECT User FROM mysql.user; // To see all the users
-USE wordpress // To connect on your wordpress database
+mysql -p // To connect on mysql CLI as root
+mysql -u $USER -p // To connect on mysql CLI as $USER
 mysqldump -u username -p databasename > filename.sql // To export the file
 mysql -uroot -p$MYSQL_ROOT_PASSWORD $MYSQL_DATABASE < /usr/local/bin/wordpress.sql // To import the file
 ```

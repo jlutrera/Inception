@@ -1,7 +1,2 @@
-.env
+VM/
 .DS_Store
-MV/
-*.pdf
-inception.html
-inception_files/
-README.md
