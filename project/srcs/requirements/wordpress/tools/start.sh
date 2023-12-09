@@ -17,15 +17,15 @@ if [ ! -f /var/www/html/wordpress/wp-config.php ]; then
 	wp core download --allow-root;
 	wp config create --allow-root \
 				--dbname=$DB_DATABASE \
-				--dbhost= mariadb:3306 \
+				--dbhost=mariadb:3306 \
 				--dbprefix=wp_ \
 				--dbuser=$DB_USER \
 				--dbpass=$DB_USER_PASSWORD;
 
 	echo "Wordpress: creando usuarios..."
 	wp core install --allow-root \
-				--url= jutrera.42.fr \
-				--title= wordpress \
+				--url=jutrera.42.fr \
+				--title=wordpress \
 				--admin_user=${WORDPRESS_ROOT_LOGIN} \
 				--admin_password=${WORDPRESS_ROOT_PASSWORD} \
 				--admin_email=${WORDPRESS_ROOT_EMAIL};
