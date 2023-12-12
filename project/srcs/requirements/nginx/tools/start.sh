@@ -5,7 +5,7 @@ if [ ! -f /etc/ssl/certs/nginx.crt ]; then
 		-keyout /etc/ssl/private/nginx.key \
 		-out /etc/ssl/certs/nginx.crt \
 		-subj "/C=ES/ST=Spain/L=Spain/O=wordpress/CN=jutrera.42.fr";
-	echo " Set up SSL done!";
+	echo "Set up SSL done!";
 fi
 
 nginx -g 'daemon off;';

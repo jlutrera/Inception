@@ -34,12 +34,12 @@ if [ ! -f /var/www/html/wordpress/wp-config.php ]; then
 	wp option update comments_notify 0 --allow-root;
 	wp option update moderation_notify 0 --allow-root;
 
-	wp theme install popularis-verse --activate --allow-root
+	wp theme install escutcheon --activate --allow-root
 
 	echo "Configured !"
 else
 	echo "Already configured !"
 fi
 
-echo "Listening in port 9000"
+echo "Listening on port 9000"
 /usr/sbin/php-fpm7.4 --nodaemonize
