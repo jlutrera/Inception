@@ -14,9 +14,9 @@ if [ ! -d "/var/lib/mysql/$DB_DATABASE" ]; then
 	echo "GRANT ALL PRIVILEGES ON $DB_DATABASE.* TO '$DB_USER'@'%';" >> "$MYSQL_INIT_FILE"
 	echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '$DB_ROOT_PASSWORD';" >> "$MYSQL_INIT_FILE"
 	echo "FLUSH PRIVILEGES;" >> "$MYSQL_INIT_FILE"
-	echo "Starting MariDB server..."
+	echo "Starting server"
 	mysqld_safe --init-file=$MYSQL_INIT_FILE >/dev/null 2>&1
 else
-	echo "Starting MariDB server..."
+	echo "Starting server"
 	mysqld_safe >/dev/null 2>&1
 fi

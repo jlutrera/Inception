@@ -5,7 +5,7 @@ mkdir -p /run/php/;
 touch /run/php/php7.4-fpm.pid;
 
 if [ ! -f /var/www/html/wordpress/wp-config.php ]; then
-	echo "Wordpress: configurando..."
+	echo "Configuring.."
 
 	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar;
 	chmod +x wp-cli.phar;
@@ -34,12 +34,12 @@ if [ ! -f /var/www/html/wordpress/wp-config.php ]; then
 	wp option update comments_notify 0 --allow-root;
 	wp option update moderation_notify 0 --allow-root;
 
-	wp theme install twentytwentyone --activate --allow-root
+	wp theme install popularis-verse --activate --allow-root
 
-	echo "Wordpress: ¡configurado!"
+	echo "Configured !"
 else
-	echo "Wordpress: ¡ya está configurado!"
+	echo "Already configured !"
 fi
 
-echo "Wordpress iniciado en :9000"
+echo "Listening in port 9000"
 /usr/sbin/php-fpm7.4 --nodaemonize

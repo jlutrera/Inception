@@ -1,31 +1,53 @@
-all:
-		@sudo rm -rf /home/jutrera/data
-		@sudo mkdir /home/jutrera/data
-		@sudo mkdir /home/jutrera/data/mariadb
-		@sudo mkdir /home/jutrera/data/wordpress
-		@docker-compose -f srcs/docker-compose.yml up -d
+# COLOURS #
+GREEN = \033[0;32m
+RESET = \033[0m
+
+# VARIABLES #
+DC_PATH = ./srcs/docker-compose.yml
+WP_VOLUME = /home/jutrera/data/wordpress
+DB_VOLUME = /home/jutrera/data/mariadb
+DATA_PATH = /home/jutrera/data
+
+# RULES #
+
+all: build
+
+$(WP_VOLUME):
+	@sudo mkdir -p $(WP_VOLUME)
+$(DB_VOLUME):
+	@sudo mkdir -p $(DB_VOLUME)
+
+build: $(WP_VOLUME) $(DB_VOLUME)
+	@echo "$(GREEN)<+> BUILDING CONTAINERS <+> $(RESET)"
+	@sudo docker-compose -f $(DC_PATH) up -d --build
 
 up:
-		@docker-compose -f srcs/docker-compose.yml up -d
-
-down:
-		@docker-compose -f srcs/docker-compose.yml down
-
-start:
-		@docker-compose -f srcs/docker-compose.yml start
+	@echo "$(GREEN)<+> STARTING CONTAINERS <+> $(RESET)"
+	@sudo docker-compose -f $(DC_PATH) up -d
 
 stop:
-		@docker-compose -f srcs/docker-compose.yml stop
+	@echo "$(GREEN)<+> STOPPING CONTAINERS <+> $(RESET)"
+	@sudo docker-compose -f $(DC_PATH) stop
 
+down:	stop
+	@echo "$(GREEN)<+> DELETING BUILD <+> $(RESET)"
+	@sudo docker-compose -f $(DC_PATH) down -v
+		
 list:
-		@docker-compose -f srcs/docker-compose.yml ps
+	@echo "$(GREEN)<+> LISTING CONTAINERS <+> $(RESET)"
+	@sudo docker-compose -f $(DC_PATH) ps
 
 logs :
-		@docker-compose -f srcs/docker-compose.yml logs
+	@echo "$(GREEN)<+> SHOWING LOGS <+> $(RESET)"
+	@sudo docker-compose -f $(DC_PATH) logs -f
 
-clean:
-		@docker compose -f srcs/docker-compose.yml down -v
-		@docker image prune -a -f
-		@sudo rm -rf /home/jutrera/data
+clean_data:
+	@echo "$(GREEN)<+> DELETING DATA <+> $(RESET)"
+	@sudo rm -rf $(DATA_PATH)
 
-.PHONY:	all up down start stop logs list clean
+clean:	down clean_data
+	@echo "$(GREEN)<+> DELETING IMAGES <+> $(RESET)"
+	@sudo docker system prune -a -f
+
+re:	clean all
+.PHONY:	all build up stop down list logs clean_data clean re
