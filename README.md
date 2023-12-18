@@ -4,6 +4,7 @@
 ### 2. [Nginx](#nginx)
 ### 3. [Wordpress](#wordpress)
 ### 4. [MariaDB](#mariadb)
+### 5. [Virtual  Machine](#Virtual-Machine) 
 
 This project from 42 school aims to broaden your knowledge of system administration by using Docker. In this tutorial you will virtualize several Docker images, creating them in your new personal virtual machine. In this read.me you will have an inception tutorial to know how the project works.
 
@@ -21,12 +22,12 @@ You will be lost and you will not understand properly how it works. Do it step b
 	- You can begin from here the docker-compose file, you don't need it before
 
 4. **Finish with MariaDB.**
-You want to try if each container works in general? No worries, you will be able to do it by importing images for wordpress and mariaDB from the hub.  
-
-The 3 github which helped me a lot for the project : [llescure](https://github.com/llescure/42_Inception), [malatini](https://github.com/42cursus/inception) and [vbachele](https://github.com/vbachele/Inception) 
+	- You want to try if each container works in general? No worries, you will be able to do it by importing images for wordpress and mariaDB from the hub.  
 
 5. **Useful things to know about Inception.**
-- On my Windows pc, I had to install Ducker Desktop and enable "Use the WSL 2 based engine" in the configuration
+	- On my Windows pc, I had to install Ducker Desktop and enable "Use the WSL 2 based engine" in the configuration
+
+The 3 github which helped me a lot for the project : [llescure](https://github.com/llescure/42_Inception), [malatini](https://github.com/42cursus/inception) and [vbachele](https://github.com/vbachele/Inception) 
 
 # DEFINITIONS
 
@@ -383,10 +384,57 @@ mysql -uroot -p$MYSQL_ROOT_PASSWORD $MYSQL_DATABASE < /usr/local/bin/wordpress.s
 			- TADA you will be directly in your website by passing the phase of installation !
 
 ## Commands to check if all is working
+mysql -u (user) -p
 ```c
 	SHOW DATABASES; // show the databes
 	use 'wordpress'; // go in the wordpress databse
 	SHOW TABLES; // show all the tables from the database you selected
-	SELECT wp_users.display_name FROM wp_users; // display username from wordpress database
-	SELECT *  FROM wp_users; // select
+	SELECT user, host FROM mysql.user; // display users from mysql database
 ```
+
+# VIRTUAL-MACHINE
+
+Install a virtual machine (using VirtualBox) with the Debian 12 ISO image. We will install the operating system in graphical mode, with the domain [login].42.fr and SSH service.
+
+## SSH service
+
+To connect via SSH from the host, configure port 4242 on the virtual machine:
+1. Settings -> Network -> Adapter1 -> Advanced -> Port Forwarding (4242 for Host and Guest Port)
+2. In the VM terminal:
+```c
+	su -
+	apt-get install sudo
+	sudo nano /etc/ssh/sshd_config:
+		- #Port 22 -> Port 4242
+		- #PermitRootLogin prohibit-password -> PermitRootLogin no
+	sudo nano /etc/ssh/ssh_config:
+		- #Port 22 -> Port 4242
+	sudo service ssh restart
+	sudo service ssh status
+```
+3. To test the connection from the host:
+```c
+	ssh jutrera@localhost -p 4242
+```
+
+## Install necessary programs
+1. Vim. Because I prefer it to "nano."
+2. Make. To execute Makefiles
+3. Git
+4. Docker
+5. Docker-Compose
+
+## Change domain name
+1. sudo nano /etc/hosts:
+```c
+	127.0.0.1 jutrera.42.fr
+```
+
+## Change machine's public and private keys
+To clone the 42 repository, we need to configure the public key for our profile.
+1. To generate the public and private keys:
+```c
+	sudo ssh-keygen
+```
+2. Copy the private key (id_rsa) to /.ssh/
+3. Copy the public key (id_rsa.pub) to the 42 profile
