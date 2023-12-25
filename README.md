@@ -414,27 +414,39 @@ To connect via SSH from the host, configure port 4242 on the virtual machine:
 ```
 3. To test the connection from the host:
 ```c
-	ssh jutrera@localhost -p 4242
+	ssh [login]@localhost -p 4242
 ```
 
 ## Install necessary programs
-1. Vim. Because I prefer it to "nano."
-2. Make. To execute Makefiles
-3. Git
-4. Docker
-5. Docker-Compose
+1. Make. To execute Makefiles
+2. Git
+3. Docker
+4. Docker-Compose
 
 ## Change domain name
-1. sudo nano /etc/hosts:
+Type the statement:
+
 ```c
-	127.0.0.1 jutrera.42.fr
+sudo nano /etc/hosts
 ```
+and add this line:  127.0.0.1 [login].42.fr
 
 ## Change machine's public and private keys
-To clone the 42 repository, we need to configure the public key for our profile.
+To clone the 42 repository, we need to configure the public key for our profile.  Make sure to use "sudo" with each command.  If not, the keys will be different
 1. To generate the public and private keys:
 ```c
 	sudo ssh-keygen
 ```
-2. Copy the private key (id_rsa) to /.ssh/
+2. Copy the private key (id_rsa) to ~/.ssh/
 3. Copy the public key (id_rsa.pub) to the 42 profile
+
+It could be neccsary to execute these statements:
+```c
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa
+```
+... and the next one to prove the connection is working
+
+```c
+ssh -T git@vogsphere-v2.42madrid.com
+```

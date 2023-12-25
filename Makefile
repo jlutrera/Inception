@@ -4,9 +4,9 @@ RESET = \033[0m
 
 # VARIABLES #
 DC_PATH = ./srcs/docker-compose.yml
-WP_VOLUME = /home/jutrera/data/wordpress
-DB_VOLUME = /home/jutrera/data/mariadb
-DATA_PATH = /home/jutrera/data
+WP_VOLUME = /home/jutrera-/data/wordpress
+DB_VOLUME = /home/jutrera-/data/mariadb
+DATA_PATH = /home/jutrera-/data
 
 # RULES #
 

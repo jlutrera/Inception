@@ -1,53 +1,28 @@
 server {
-    # Este bloque indica a Nginx que escuche en el puerto 443 con SSL
     listen 443 ssl;
     listen [::]:443 ssl;
 
-    # Este bloque define el nombre de tu servidor y el bloque de servidor que debe utilizarse para las solicitudes a tu servidor
     server_name jutrera.42.fr;
 
     ssl_certificate_key /etc/ssl/private/nginx.key;
     ssl_certificate /etc/ssl/certs/nginx.crt;
     ssl_protocols TLSv1.2 TLSv1.3;
 
-    # La directiva "index" define los archivos que se usarán como índices al procesar solicitudes en tu servidor
     index index.php index.html index.htm;
 
-    # La directiva "root" establece el directorio raíz para las solicitudes a tu servidor.
-    # Este directorio, /var/www/html/wordpress, se crea como un punto de montaje durante la construcción con las instrucciones del Dockerfile de WordPress.
     root /var/www/html/wordpress;
 
-    # En este bloque de ubicación, usamos la directiva "try_files" para verificar archivos correspondientes a solicitudes URI individuales.
-    # En lugar de devolver el estado predeterminado 404 Not Found, redirigimos el control al archivo index.php de WordPress con los argumentos de la solicitud.
     location / {
 		try_files $uri $uri/ /index.php$is_args$args;
-        #try_files $uri $uri/ =404;
     }
-
-    # Este bloque de ubicación manejará solicitudes PHP y las proxyará al contenedor de WordPress.
-    # Dado que nuestra imagen Docker de WordPress se basará en la imagen php:fpm,
-    # también agregamos configuraciones específicas de FastCGI a este bloque.
-    # Nginx requiere un intérprete PHP independiente para las solicitudes PHP, en nuestro caso,
-    # estas solicitudes se manejarán con php-fpm, que estará en la imagen php:fpm.
-    # Además, este bloque de ubicación contiene directivas, variables y opciones FastCGI para proxyar las solicitudes a la aplicación WordPress en el contenedor wordpress,
-    # establecer el índice preferido para el URI capturado de la solicitud, y analizar los URIs de las solicitudes.
 
     location ~ \.php$ {
 		try_files $uri = 404;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
         fastcgi_pass wordpress:9000;
         fastcgi_index index.php;
-
-		# Incluye un conjunto estándar de parámetros FastCGI. Esto proporciona configuraciones comunes para trabajar con aplicaciones FastCGI
         include fastcgi_params;
-
-		# Establece el nombre del script que se pasará al servidor FastCGI.
-		# En este caso, se construye utilizando la ruta del documento raíz y el nombre del script.
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-
-		# Establece la información de la ruta del script FastCGI.
-		# Esto se utiliza para pasar información adicional sobre la ruta al script PHP.
         fastcgi_param PATH_INFO $fastcgi_path_info;
     }
-	
 }
