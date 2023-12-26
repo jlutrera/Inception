@@ -398,17 +398,19 @@ Install a virtual machine (using VirtualBox) with the Debian 12 ISO image. We wi
 
 ## SSH service
 
-To connect via SSH from the host, configure port 4242 on the virtual machine:
-1. Settings -> Network -> Adapter1 -> Advanced -> Port Forwarding (4242 for Host and Guest Port)
+To connect via SSH from the host, configure port 4242 on the virtual machine.  We need to configure port 22 in order to connect to vogsphere-v2 and clone the repository.
+1. Settings -> Network -> Adapter1 -> Advanced -> Port Forwarding (4242 and 22 for Host and Guest Port)
 2. In the VM terminal:
 ```c
 	su -
 	apt-get install sudo
 	sudo nano /etc/ssh/sshd_config:
-		- #Port 22 -> Port 4242
+		- #Port 22 -> Port 22
+		- Port 4242
 		- #PermitRootLogin prohibit-password -> PermitRootLogin no
 	sudo nano /etc/ssh/ssh_config:
-		- #Port 22 -> Port 4242
+		- #Port 22 -> Port 22
+		- Port 4242
 	sudo service ssh restart
 	sudo service ssh status
 ```
